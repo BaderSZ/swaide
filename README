@@ -2,9 +2,12 @@ README
 
 Bash script wrapper for AIDE IDS, made to automate/simplify tasks.
 
+This is by no means complete and as of now not recommended for actual use, as this code is not fully tested and written hurriedly.
+
 TODO:
 - interactivity
 - lock file compatibilty
 - echo progress
-- user/permission checks
+- proper user/permission checks
+- other functionality
 - actually test this thing...
