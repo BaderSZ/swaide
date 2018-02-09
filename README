@@ -3,4 +3,8 @@ README
 Bash script wrapper for AIDE IDS, made to automate/simplify tasks.
 
 TODO:
-
+- interactivity
+- lock file compatibilty
+- echo progress
+- user/permission checks
+- actually test this thing...
