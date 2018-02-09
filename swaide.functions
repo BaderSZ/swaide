@@ -72,8 +72,18 @@ TMPFILE=/tmp/swaide.conf;
 }
 
 updatedb(){
+  archivedb;
   sudo $AIDEBIN "$CONFIG_OPT" -u
   return $?;
+}
+
+archivedb(){
+OLDDB=/var/lib/aide/aide.db
+NEWDB=/var/lib/aide/aide.db.new
+  if ! [ -w "$OLDDB" ] && ! [ -w "$NEWDB"  ]; then
+    sudo mv "$OLDDB" "$OLDDB.$(date +%Y-%m-%d-%H:%M:%S)"
+    sudo mv "$NEWDB" "$OLDDB";
+  fi
 }
 
 swhelp(){
