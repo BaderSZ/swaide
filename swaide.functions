@@ -1,0 +1,89 @@
+## function definitions
+
+CONFIG_OPT="--config $CONFIG"
+
+## initialise aide database
+init(){
+  ## Use aideinit when possible to save work, check if doesn't exist
+  echo -e "Initialising script, this may take a while\n";
+  sudo aideinit;
+  return $?;
+}
+
+## check aide db, -C
+check(){
+  echo -e "Checking db file(s), this might take a while";
+  sudo $AIDEBIN $CONFIG_OPT -C;
+  return $?;
+}
+
+## check if the config is valid, accepts input
+checkconfig(){
+  if [ -n "$1" ]; then
+    if ! [ -r "$1" ]; then
+      echo -e "Cannot read file $1";
+      return 1;
+    fi
+  else
+      sudo $AIDEBIN -D -c "$1";
+      return $?;
+  fi
+
+
+  echo -e "Checking default config $CONFIG";
+  sudo $AIDEBIN -D  "$CONFIG_OPT";
+  RET=$?
+  if [ 0 -eq "$RET" ]; then
+    echo -e "Config check completed! No errors found";
+    return $RET;
+  fi
+}
+
+## update config with additional options given as input 
+## in the form of a file
+updateconfig(){
+
+TMPFILE=/tmp/swaide.conf;
+
+  if [ -z "$1" ]; then
+    echo -e "No input file given";
+    return 1;
+  else
+
+    if ! [ -r "$CONFIG" ] && ! [ -r "$1" ]; then
+      echo -e "Cannot read config or input  files, exiting!";
+      return 1;
+    fi
+
+    cat "$CONFIG" > "$TMPFILE";
+    cat "$1" >> "$TMPFILE";
+    
+    checkconfig "$TMPFILE";
+    if [ 0 -ne "$?" ]; then
+      echo "Config incorrect, see errors";
+      return 1;
+    else
+      sudo mv $TMPFILE $CONFIG;
+      echo "Success!\n Your new configuration is now in $CONFIG";
+    fi
+    
+  fi
+  return 0;
+}
+
+updatedb(){
+  sudo $AIDEBIN "$CONFIG_OPT" -u
+  return $?;
+}
+
+swhelp(){
+ echo -e "swaide, Simplified/Scripted Wrapper for AIDE\n" \
+         "Commands:\n" \
+         "  -i, --init\tInitialize the database\n" \
+         "  -c, --check\tCheck the database for changes\n" \
+         "  -k, --check-config\tCheck the config file (*)\n" \
+         "  -U, --update-config\tUpdate the config file with local conf(*)\n" \
+         "  -u, --update-[db,database]\tCheck and update the database file\n" \
+         "  (*) = accepts input\n" 
+  return 0;
+}
