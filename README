@@ -9,5 +9,6 @@ TODO:
 - lock file compatibilty
 - echo progress
 - proper user/permission checks
+- ability to read/list/compare older archived DBs and list changes
 - other functionality
 - actually test this thing...
