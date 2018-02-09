@@ -37,6 +37,7 @@ case $1 in
           updatedb;
           ;;
   --help|-h)
+	        swhelp;
 	  ;;
   *)
           echo "Unknown option/error";
